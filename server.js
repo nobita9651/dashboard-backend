@@ -1,5 +1,5 @@
 // server.js
-
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
@@ -8,7 +8,6 @@ const cors = require("cors");
 const { SignUpUser, User } = require("./model/user.model");
 const app = express();
 const PORT = process.env.PORT || 5000;
-require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
@@ -18,7 +17,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
+const db = mongoose.connection;
 const storage = multer.memoryStorage(); // Store files in memory as buffers
 const upload = multer({ storage: storage });
 
