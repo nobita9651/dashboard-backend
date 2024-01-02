@@ -6,6 +6,7 @@ const multer = require("multer");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const { SignUpUser, User } = require("./model/user.model");
+// const { SignUpUser, AddUser } = require("./model/user.model");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -17,7 +18,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-const db = mongoose.connection;
+
 const storage = multer.memoryStorage(); // Store files in memory as buffers
 const upload = multer({ storage: storage });
 
@@ -107,9 +108,10 @@ app.post("/api/login", async (req, res) => {
     if (passwordMatch) {
       // Generate a token
       const token = jwt.sign({ userId: user._id }, "abhishek", {
-        expiresIn: "1h",
+        expiresIn: "1h", // You can adjust the expiration time
       });
 
+      // Return the token in the response
       return res.json({ token, message: "Login successful" });
     } else {
       return res.status(401).json({ message: "Invalid credentials" });
@@ -123,6 +125,7 @@ app.post("/api/login", async (req, res) => {
 app.get("/api/users", async (req, res) => {
   try {
     const users = await User.find();
+    console.log("Retrieved users:", users);
     res.json(users);
   } catch (error) {
     console.error("Error fetching users:", error);
