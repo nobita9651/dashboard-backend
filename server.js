@@ -20,13 +20,18 @@ app.use(cors());
 // });
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Connecting to MongoDB:", process.env.MONGODB_URI);
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log(`Mongo Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.log(error);
+    console.log("MongoDB connection error:", error);
     process.exit(1);
   }
 };
+
 const storage = multer.memoryStorage(); // Store files in memory as buffers
 const upload = multer({ storage: storage });
 
